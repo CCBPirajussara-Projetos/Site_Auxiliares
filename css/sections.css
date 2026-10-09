@@ -1,0 +1,207 @@
+/* ==========================
+   CONTAINERS PRINCIPAIS
+========================== */
+#login-section,
+#selection-section,
+#app-section,
+#relatorio-section {
+  width: 100%;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 0 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#login-section,
+#selection-section {
+  justify-content: center;
+  min-height: calc(100vh - 100px);
+  padding: 20px;
+}
+
+#app-section,
+#relatorio-section {
+  min-height: calc(100vh - 80px);
+}
+
+/* ==========================
+   SEÇÃO DE VISITAS
+========================== */
+#secao-visitas {
+  text-align: center;
+  margin: 15px 0;
+}
+
+#secao-visitas .filtros-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+#secao-visitas label {
+  font-weight: 500;
+  color: #083C6C;
+  margin-right: 5px;
+}
+
+#secao-visitas select,
+#secao-visitas button {
+  min-width: 160px;
+  flex: 1;
+}
+
+/* ==========================
+   LISTAS PADRONIZADAS (Visitas, Eventos, Palavras)
+========================== */
+
+/* Container base para todas as listas */
+#comunsSelecionadas,
+#eventosSelecionados,
+#palavrasSelecionadas {
+  border: 2px dashed #92B5E1;
+  padding: 15px;
+  border-radius: 10px;
+  background: #D8DEE6;
+  min-height: 60px;
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
+}
+
+/* Item base para todos os itens (visitas, eventos, palavras) */
+.comum-item,
+.evento-item,
+.palavra-item {
+  display: inline-flex;
+  align-items: center;
+  background: #C3CBD6;
+  color: #083C6C;
+  padding: 10px 18px;
+  margin: 5px;
+  border-radius: 20px;
+  font-size: 2rem;
+  animation: slideIn 0.3s ease;
+  border: 1px solid #92B5E1;
+}
+
+/* Botão remover base para todos */
+.remover-comum,
+.remover-evento,
+.remover-palavra {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: #083C6C;
+  border-radius: 50%;
+  cursor: pointer;
+  font-weight: bold;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  font-size: 2rem;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+/* Estado vazio para cada lista */
+#comunsSelecionadas:empty::before {
+  content: "Nenhuma comum incluída";
+  color: #1D5A85;
+  font-style: italic;
+}
+
+#eventosSelecionados:empty::before {
+  content: "Nenhum evento incluído";
+  color: #1D5A85;
+  font-style: italic;
+}
+
+#palavrasSelecionadas:empty::before {
+  content: "Nenhuma palavra adicionada";
+  color: #1D5A85;
+  font-style: italic;
+}
+
+/* ==========================
+   AUTOCOMPLETE (se usado)
+========================== */
+.autocomplete-results {
+  position: absolute;
+  z-index: 10;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+  box-sizing: border-box;
+  left: 0;
+  top: 100%;
+}
+
+.resultado-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9em;
+  color: #333;
+}
+
+.resultado-item:hover {
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
+
+/* ==========================
+   CAMPOS "OUTRA CIDADE"
+========================== */
+#campoOutraCidade {
+  background: rgba(255, 255, 255, 0.5);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px dashed #92B5E1;
+  margin-top: 10px;
+}
+
+#campoOutraCidade input {
+  margin: 5px 0;
+  font-size: 2rem;
+}
+
+#campoOutraCidade input::placeholder {
+  color: #7B7B7B;
+  font-size: 2rem;
+}
+
+/* ==========================
+   ESTADOS DE ERRO
+========================== */
+.erro {
+  color: #dc3545;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ==========================
+   ANIMAÇÕES
+========================== */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Relatório - CCB Mocidade</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    📊 CCB Mocidade Pirajussara
+    <button onclick="voltarSelecao()" class="voltar">← Voltar</button>
+  </div>
+
+  <div id="relatorio-section">
+    <div class="card">
+      <h1>Relatório do Dia</h1>
+      <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+        <input type="date" id="data-relatorio" onchange="carregarRelatorio()">
+        <button onclick="carregarRelatorio()">Carregar Relatório</button>
+      </div>
+    </div>
+
+    <div class="card relatorio">
+      <pre id="saida">Selecione uma data para ver o relatório</pre>
+    </div>
+
+    <div class="card">
+      <h2>Exportar Relatório Anual</h2>
+      <div style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+        <select id="select-ano-relatorio" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+          <option value="">Selecione um ano</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+          <option value="2029">2029</option>
+          <option value="2030">2030</option>
+        </select>
+        <button onclick="exportarAnualSelecionado()">Exportar PDF</button>
+      </div>
+      <p style="text-align: center; margin-top: 10px; color: #666; font-size: 0.9em;">
+        Selecione o ano para gerar o relatório anual em PDF
+      </p>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/add.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/export.js"></script>
+  
+  <script>
+    // Adicionar o ano atual como opção selecionada por padrão
+    document.addEventListener('DOMContentLoaded', function() {
+      const anoAtual = new Date().getFullYear().toString();
+      const selectAno = document.getElementById('select-ano-relatorio');
+      
+      // Adicionar o ano atual se ainda não estiver na lista
+      let anoExiste = false;
+      for (let i = 0; i < selectAno.options.length; i++) {
+        if (selectAno.options[i].value === anoAtual) {
+          anoExiste = true;
+          break;
+        }
+      }
+      
+      if (!anoExiste && parseInt(anoAtual) >= 2025) {
+        const option = document.createElement('option');
+        option.value = anoAtual;
+        option.textContent = anoAtual;
+        selectAno.appendChild(option);
+      }
+      
+      // Ordenar os anos (do mais recente para o mais antigo)
+      const options = Array.from(selectAno.options);
+      options.sort((a, b) => b.value - a.value);
+      selectAno.innerHTML = '';
+      options.forEach(opt => selectAno.appendChild(opt));
+      
+      // Selecionar o ano atual
+      if (selectAno.querySelector(`option[value="${anoAtual}"]`)) {
+        selectAno.value = anoAtual;
+      } else if (selectAno.options.length > 0) {
+        selectAno.selectedIndex = 0;
+      }
+
+      // --- NOVO: Configurar data atual e carregar relatório automaticamente ---
+      const dataRelatorioInput = document.getElementById('data-relatorio');
+      if (dataRelatorioInput) {
+        // Definir a data de hoje
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+        const dia = String(hoje.getDate()).padStart(2, '0');
+        dataRelatorioInput.value = `${ano}-${mes}-${dia}`;
+        
+        // Carregar relatório automaticamente
+        carregarRelatorio();
+      }
+    });
+    
+    // Função para exportar o ano selecionado
+    function exportarAnualSelecionado() {
+      const select = document.getElementById('select-ano-relatorio');
+      const anoSelecionado = select.value;
+      
+      if (!anoSelecionado) {
+        alert("Por favor, selecione um ano para exportar.");
+        return;
+      }
+      
+      // Verificar se a função exportarAnual existe
+      if (typeof exportarAnual === 'function') {
+        exportarAnual(anoSelecionado);
+      } else {
+        alert("Erro: Função de exportação não disponível.");
+        console.error("Função exportarAnual não encontrada!");
+      }
+    }
+  </script>
+</body>
+</html>

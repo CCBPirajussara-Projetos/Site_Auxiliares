@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Moças - CCB Mocidade</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    📊 CCB Mocidade Pirajussara
+    <button onclick="voltarSelecao()" class="voltar">← Voltar</button>
+  </div>
+
+  <div id="app-section">
+    <div class="card">
+      <h1>Contagem de Frequência - Moças</h1>
+      <input type="date" id="data">
+    </div>
+
+    <div class="card">
+      <h2>Lado das Moças</h2>
+      <input type="number" id="fila1_f" placeholder="Fila 1">
+      <input type="number" id="fila2_f" placeholder="Fila 2">
+      <input type="number" id="fila3_f" placeholder="Fila 3">
+      <input type="number" id="fila4_f" placeholder="Fila 4">
+      <input type="number" id="fila5_f" placeholder="Fila 5">
+      <input type="number" id="ind_f" placeholder="Recitativos Individuais">
+      <input type="text" id="org" placeholder="Organista">
+      <input type="number" id="totalf" placeholder="Total de congregados moças">
+    </div>
+
+    <div class="card" id="secao-palavra">
+      <h2>📖 Palavras do Dia</h2>
+      <button onclick="abrirPopupPalavra()" class="btn-adicionar">+ Adicionar Palavra</button>
+      <div id="palavrasSelecionadas">
+        <p style="margin: 0; color: #666; font-style: italic;">Nenhuma palavra adicionada</p>
+      </div>
+    </div>
+
+    <div class="card" id="secao-visitas">
+      <h2>Visitas</h2>
+      <div class="filtros-container">
+        <div>
+          <label for="cidadeSelect">Cidade:</label>
+          <select id="cidadeSelect">
+            <option value="">Selecione a cidade</option>
+            <option value="taboao">Taboão da Serra</option>
+            <option value="embu">Embu das Artes</option>
+            <option value="outra">Outra Cidade</option>
+          </select>
+        </div>
+        <div>
+          <label for="comumSelect">Comum:</label>
+          <select id="comumSelect" disabled>
+            <option value="">Selecione a comum</option>
+          </select>
+        <div id="campoOutraCidade" style="display: none; margin-top: 10px;">
+          <input type="text" id="outraCidade" placeholder="Nome da Cidade" style="margin-bottom: 8px;">
+          <input type="text" id="outraComum" placeholder="Nome da Comum">
+        </div>
+        </div>
+        <button id="incluirComumBtn" onclick="incluirComum()" disabled>Incluir</button>
+      </div>
+      <div id="comunsSelecionadas"></div>
+    </div>
+
+    
+    <!-- NOVA SEÇÃO: OUTROS EVENTOS -->
+    <div class="card" id="secao-outros-eventos">
+      <h2>Outros Eventos</h2>
+      <div class="filtros-container">
+        <div>
+          <label for="eventoSelect">Evento:</label>
+          <select id="eventoSelect" onchange="mostrarCampoEvento()">
+            <option value="">Selecione o evento</option>
+            <option value="despedidaCasal">Despedida de casal</option>
+            <option value="apresentacaoMusicos">Apresentação de músicos</option>
+            <option value="apresentacaoAuxiliar">Apresentação de auxiliar</option>
+            <option value="outros">Outros</option>
+          </select>
+        </div>
+        <div id="campoEventoExtra" style="display: none; margin-top: 10px;">
+          <input type="text" id="descricaoEvento" placeholder="Descreva o evento">
+          <button id="incluirEventoBtn" onclick="incluirEvento()">Incluir</button>
+        </div>
+      </div>
+      <div id="eventosSelecionados"></div>
+    </div>
+
+    <div class="card">
+      <button onclick="salvar('mocas')">Salvar</button>
+      <button onclick="irParaRelatorio()" class="relatorio-anual">Ver Relatório do Dia</button>
+    </div>
+  </div>
+  </div>
+
+  </div>
+
+  <!-- Pop-up para selecionar palavra -->
+<div id="popupPalavra" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; overflow-y: auto;">
+  <div style="background: white; max-width: 800px; width: 90%; min-height: 60vh; max-height: 90vh; border-radius: 12px; padding: 20px; position: relative; overflow-y: auto; box-shadow: 0 4px 20px rgba(0,0,0,0.3); display: flex; flex-direction: column;">    <button onclick="fecharPopupPalavra()" style="position: sticky; top: 0; float: right; background: #dc3545; color: white; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 20px; cursor: pointer;">×</button>
+    <h2 style="margin-top: 0;">Selecionar Palavra da Bíblia</h2>
+
+    <!-- Lista de livros -->
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; max-height: 40vh; overflow-y: auto; padding: 12px; border: 2px solid #007bff; border-radius: 12px; background: #f8f9fa;">
+      <div id="listaLivrosPopup" style="display: flex; flex-wrap: wrap; gap: 8px; width: 100%; align-content: flex-start;">
+        <!-- Os livros serão inseridos via JavaScript com estilo maior -->
+      </div>
+    </div>
+
+    <!-- Campos de referência -->
+    <div style="display: flex; gap: 10px; flex: 1; min-height: 0; margin-bottom: 12px;">
+      <input type="number" id="popupCapitulo" placeholder="Capítulo" style="flex: 1; padding: 8px; font-size: 1.1em; width: 0; min-width: 0;">
+      <input type="number" id="popupVersiculoInicio" placeholder="Versículo Início" style="flex: 1; padding: 8px; font-size: 1.1em; width: 0; min-width: 0;">
+      <input type="number" id="popupVersiculoFim" placeholder="Versículo Fim" style="flex: 1; padding: 8px; font-size: 1.1em; width: 0; min-width: 0;">
+    </div>
+
+    <!-- Botões de ação -->
+    <div style="display: flex; gap: 12px; justify-content: flex-end; flex-shrink: 0;">
+      <button onclick="fecharPopupPalavra()" style="padding: 10px 24px; background: #6c757d; color: white; border: none; border-radius: 6px; font-size: 1em; cursor: pointer;">Cancelar</button>
+      <button id="botaoAplicarPalavra" onclick="aplicarPalavra()" style="padding: 10px 24px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 1em; cursor: pointer;" disabled>Aplicar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // === VARIÁVEIS GLOBAIS PARA PALAVRAS ===
+  let palavrasIncluidas = [];
+  let livroSelecionadoPopup = '';
+  let textoBuscado = '';
+  let referenciaBuscada = '';
+
+  // === MAPA DE LIVROS (abreviações) ===
+  const STATIC_BOOK_MAP = {
+      'Gênesis': 'gn', 'Êxodo': 'ex', 'Levítico': 'lv', 'Números': 'nm', 'Deuteronômio': 'dt',
+      'Josué': 'js', 'Juízes': 'jz', 'Rute': 'rt', '1 Samuel': '1sm', '2 Samuel': '2sm',
+      '1 Reis': '1rs', '2 Reis': '2rs', '1 Crônicas': '1cr', '2 Crônicas': '2cr',
+      'Esdras': 'ed', 'Neemias': 'ne', 'Ester': 'et', 'Jó': 'jó', 'Salmos': 'sl',
+      'Provérbios': 'pv', 'Eclesiastes': 'ec', 'Cânticos': 'ct', 'Isaías': 'is',
+      'Jeremias': 'jr', 'Lamentações': 'lm', 'Ezequiel': 'ez', 'Daniel': 'dn',
+      'Oseias': 'os', 'Joel': 'jl', 'Amós': 'am', 'Obadias': 'ob', 'Jonas': 'jn',
+      'Miqueias': 'mq', 'Naum': 'na', 'Habacuque': 'hc', 'Sofonias': 'sf',
+      'Ageu': 'ag', 'Zacarias': 'zc', 'Malaquias': 'ml',
+      'Mateus': 'mt', 'Marcos': 'mc', 'Lucas': 'lc', 'João': 'jo',
+      'Atos': 'at', 'Romanos': 'rm', '1 Coríntios': '1co', '2 Coríntios': '2co',
+      'Gálatas': 'gl', 'Efésios': 'ef', 'Filipenses': 'fp', 'Colossenses': 'cl',
+      '1 Tessalonicenses': '1ts', '2 Tessalonicenses': '2ts', '1 Timóteo': '1tm',
+      '2 Timóteo': '2tm', 'Tito': 'tt', 'Filemom': 'fm', 'Hebreus': 'hb',
+      'Tiago': 'tg', '1 Pedro': '1pe', '2 Pedro': '2pe', '1 João': '1jo',
+      '2 João': '2jo', '3 João': '3jo', 'Judas': 'jd', 'Apocalipse': 'ap'
+  };
+
+  // === FUNÇÕES DO POP-UP (globais) ===
+  function abrirPopupPalavra() {
+    document.getElementById('popupPalavra').style.display = 'flex';
+    livroSelecionadoPopup = '';
+    document.querySelectorAll('.livro-item-popup').forEach(el => el.classList.remove('selecionado'));
+    document.getElementById('popupCapitulo').value = '';
+    document.getElementById('popupVersiculoInicio').value = '';
+    document.getElementById('popupVersiculoFim').value = '';
+    document.getElementById('popupPrevia').style.display = 'none';
+    document.getElementById('botaoAplicarPalavra').disabled = true;
+    textoBuscado = '';
+    referenciaBuscada = '';
+  }
+
+  function fecharPopupPalavra() {
+    document.getElementById('popupPalavra').style.display = 'none';
+  }
+
+  function popularLivrosPopup() {
+    const container = document.getElementById('listaLivrosPopup');
+    if (!container) return;
+    container.innerHTML = '';
+    const livros = Object.keys(STATIC_BOOK_MAP);
+    livros.forEach(nome => {
+      const div = document.createElement('div');
+      div.className = 'livro-item-popup';
+      div.textContent = nome;
+      div.dataset.nome = nome;
+      div.addEventListener('click', function() {
+        document.querySelectorAll('.livro-item-popup').forEach(el => el.classList.remove('selecionado'));
+        this.classList.add('selecionado');
+        livroSelecionadoPopup = this.dataset.nome;
+        verificarHabilitarAplicar();
+      });
+      container.appendChild(div);
+    });
+  }
+
+  function verificarHabilitarAplicar() {
+    const livro = livroSelecionadoPopup;
+    const capitulo = document.getElementById('popupCapitulo').value;
+    const inicio = document.getElementById('popupVersiculoInicio').value;
+    const botao = document.getElementById('botaoAplicarPalavra');
+    if (livro && capitulo && inicio) {
+      botao.disabled = false;
+    } else {
+      botao.disabled = true;
+    }
+  }
+
+  function aplicarPalavra() {
+    const livro = livroSelecionadoPopup;
+    const capitulo = document.getElementById('popupCapitulo').value;
+    const inicio = document.getElementById('popupVersiculoInicio').value;
+    const fim = document.getElementById('popupVersiculoFim').value;
+
+    if (!livro || !capitulo || !inicio) {
+      alert('Selecione um livro, capítulo e versículo inicial.');
+      return;
+    }
+
+    let referencia = `${livro} ${capitulo}:${inicio}`;
+    if (fim && fim.trim() !== '' && fim !== inicio) {
+      referencia += `-${fim}`;
+    }
+
+    if (palavrasIncluidas.includes(referencia)) {
+      alert('Esta referência já foi adicionada.');
+      return;
+    }
+
+    palavrasIncluidas.push(referencia);
+    atualizarListaPalavras();
+    fecharPopupPalavra();
+  }
+
+  function atualizarListaPalavras() {
+    const container = document.getElementById('palavrasSelecionadas');
+    if (!container) return;
+    if (palavrasIncluidas.length === 0) {
+      container.innerHTML = '<p style="margin: 0; color: #666; font-style: italic;">Nenhuma palavra adicionada</p>';
+      return;
+    }
+    container.innerHTML = '';
+    palavrasIncluidas.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.className = 'palavra-item';
+      div.innerHTML = `
+        <span class="texto"><strong>${item}</strong></span>
+        <button type="button" class="remover-palavra" onclick="removerPalavra(${index})">×</button>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function removerPalavra(index) {
+    palavrasIncluidas.splice(index, 1);
+    atualizarListaPalavras();
+  }
+
+  // === INICIALIZAÇÃO ===
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Página carregada - Inicializando sistema...');
+
+    if (typeof db === 'undefined' || db === null) {
+      console.error('Firebase Database não inicializado!');
+      if (typeof initializeFirebase === 'function') {
+        console.log('Tentando inicializar Firebase...');
+        initializeFirebase();
+      }
+    }
+
+    if (typeof configurarDataAtual === 'function') {
+      configurarDataAtual();
+    }
+
+    const currentPage = window.location.pathname.split('/').pop();
+    if (currentPage === 'mocas.html') {
+      if (typeof configurarOuvinteData === 'function') {
+        configurarOuvinteData('mocas');
+      }
+    } else if (currentPage === 'mocos.html') {
+      if (typeof configurarOuvinteData === 'function') {
+        configurarOuvinteData('mocos');
+      }
+    }
+
+    if (typeof configurarSelecaoComuns === 'function') {
+      configurarSelecaoComuns();
+    }
+
+    if (typeof mostrarCampoEvento === 'function') {
+      mostrarCampoEvento();
+    }
+
+    const inputsPopup = ['popupCapitulo', 'popupVersiculoInicio', 'popupVersiculoFim'];
+    inputsPopup.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', verificarHabilitarAplicar);
+      }
+    });
+
+    popularLivrosPopup();
+    atualizarListaPalavras();
+
+    const dataInput = document.getElementById('data');
+    if (dataInput && dataInput.value) {
+      const lado = currentPage.includes('mocas') ? 'mocas' : 'mocos';
+      if (typeof carregarDadosExistentes === 'function') {
+        carregarDadosExistentes(lado);
+      }
+    }
+  });
+</script>
+
+  <script src="js/script.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/add.js"></script>
+  <script src="js/data.js"></script>
+</body>
+</html>

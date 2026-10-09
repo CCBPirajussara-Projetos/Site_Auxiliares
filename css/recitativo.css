@@ -1,0 +1,328 @@
+/* ==========================
+   PÁGINA DE RECITATIVO
+   Mesmo padrão visual do projeto
+========================== */
+
+#recitativo-section {
+  width: 100%;
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 0 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+}
+
+/* ==========================
+   CABEÇALHO
+========================== */
+.recitativo-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.recitativo-header h1 {
+  color: #083C6C;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.recitativo-header p {
+  color: #4A5568;
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+/* ==========================
+   GRUPO DE CAMPOS (label + input)
+========================== */
+.field {
+  text-align: left;
+  width: 100%;
+  margin: 6px 0;
+}
+
+.field label {
+  display: block;
+  color: #083C6C;
+  font-weight: 600;
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+  padding-left: 4px;
+}
+
+/* Inputs menores e mais densos nesta página (formulário compacto) */
+#recitativo-section input,
+#recitativo-section select,
+#recitativo-section textarea {
+  width: 100%;
+  padding: 12px 16px;
+  margin: 6px 0;
+  border: 2px solid #92B5E1;
+  border-radius: 8px;
+  font-size: 1.6rem;
+  font-family: 'Poppins', sans-serif;
+  background: #FFFFFF;
+  color: #4A5568;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+#recitativo-section textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.4;
+}
+
+#recitativo-section input::placeholder,
+#recitativo-section textarea::placeholder {
+  color: #7B7B7B;
+}
+
+#recitativo-section input:focus,
+#recitativo-section select:focus,
+#recitativo-section textarea:focus {
+  outline: none;
+  border-color: #1D5A85;
+  box-shadow: 0 0 0 3px rgba(29, 90, 133, 0.2);
+}
+
+/* ==========================
+   LINHAS DUPLAS (Livro + Capítulo, etc.)
+========================== */
+.row-2 {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.row-2 .field {
+  flex: 1;
+}
+
+/* Em telas estreitas, empilha */
+@media (max-width: 520px) {
+  .row-2 { flex-direction: column; gap: 4px; }
+}
+
+/* ==========================
+   DICA / HINT
+========================== */
+.hint {
+  width: 100%;
+  font-size: 1.3rem;
+  color: #1D5A85;
+  background: rgba(146, 181, 225, 0.15);
+  border: 1px dashed #92B5E1;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 4px 0 12px;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.hint b {
+  color: #083C6C;
+}
+
+/* ==========================
+   BOTÃO PRINCIPAL (Gerar)
+========================== */
+#recitativo-section .primary {
+  background: #0B4E95;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  cursor: pointer;
+  width: 100%;
+  margin: 18px 0 8px;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+#recitativo-section .primary:hover:not(:disabled) {
+  background: #125fb5;
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(8, 60, 108, 0.3);
+}
+
+#recitativo-section .primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ==========================
+   BARRA DE PROGRESSO
+========================== */
+.progress {
+  width: 100%;
+  height: 10px;
+  background: #D8DEE6;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 12px 0 6px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.progress.active {
+  opacity: 1;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #083C6C, #1D5A85, #92B5E1);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+/* Estado indeterminado (listras animadas) */
+.progress.indeterminate .progress-bar {
+  width: 100% !important;
+  background: repeating-linear-gradient(
+    45deg,
+    #083C6C 0 12px,
+    #1D5A85 12px 24px
+  );
+  background-size: 200% 100%;
+  animation: progressStripes 1s linear infinite;
+}
+
+@keyframes progressStripes {
+  from { background-position: 0 0; }
+  to   { background-position: 48px 0; }
+}
+
+/* ==========================
+   STATUS
+========================== */
+.status {
+  min-height: 22px;
+  font-size: 1.4rem;
+  color: #1D5A85;
+  text-align: center;
+  margin: 4px 0 8px;
+}
+
+/* ==========================
+   MENSAGENS (info / error / success)
+========================== */
+.message {
+  width: 100%;
+  min-height: 24px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 10px 14px;
+  margin: 8px 0;
+  border-radius: 10px;
+  transition: all 0.25s ease;
+}
+
+.message.info {
+  color: #0B4E95;
+  background: rgba(146, 181, 225, 0.18);
+  border: 1px solid #92B5E1;
+}
+
+.message.success {
+  color: #0B4E95;
+  background: rgba(146, 181, 225, 0.28);
+  border: 1px solid #92B5E1;
+}
+
+.message.error {
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.08);
+  border: 1px solid rgba(220, 53, 69, 0.35);
+}
+
+.message:empty {
+  display: none;
+}
+
+/* ==========================
+   RESULTADOS
+========================== */
+.results {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.result-item {
+  background: rgb(253, 253, 250);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #D8DEE6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.result-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.result-item .info {
+  font-size: 1.3rem;
+  color: #4A5568;
+  text-align: center;
+  word-break: break-all;
+  margin-bottom: 8px;
+}
+
+.result-item .dl {
+  display: inline-block;
+  background: #063A5D;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.4rem;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.result-item .dl:hover {
+  background: #0B4E95;
+  transform: translateY(-2px);
+}
+
+/* ==========================
+   BOTÃO VOLTAR (opcional)
+========================== */
+#recitativo-section .voltar {
+  background: #063A5D;
+  color: #fff;
+  width: auto;
+  padding: 10px 18px;
+  margin-bottom: 0;
+  font-size: 1.4rem;
+}
+
+/* ==========================
+   ANIMAÇÃO
+========================== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

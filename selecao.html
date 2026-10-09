@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Seleção - CCB Mocidade</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="navbar">
+    📊 CCB Mocidade Pirajussara
+    <button onclick="logout()" class="logout-btn">Sair</button>
+  </div>
+
+  <div id="selection-section">
+    <div class="card">
+      <h2>Selecione o Lado</h2>
+      <button onclick="mostrarLado('moças')">Lado das Moças</button>
+      <button onclick="mostrarLado('moços')">Lado dos Moços</button>
+      <button id="btnRecitativo" onclick="irParaRecitativo()" class="recitativo-btn">
+      Gerar Recitativo
+      </button>
+      <br><br>
+      <button onclick="irParaRelatorio()" class="relatorio-anual">Ver Relatório do Dia</button>
+      
+      <!-- Botão para abrir o bloco de sugestões -->
+      <button id="btnSugestao">Enviar Sugestão</button>
+
+      <!-- Bloco oculto de envio de sugestão -->
+      <div id="blocoSugestao" class="hidden">
+        <h3>Sua Sugestão</h3>
+        <textarea id="textoSugestao" placeholder="Escreva aqui sua ideia ou sugestão..." maxlength="500"></textarea>
+        <button id="btnEnviarSugestao">Enviar</button>
+        <p id="msgSugestao"></p>
+      </div>
+
+    </div>
+  </div>z
+
+  <script src="js/script.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/add.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/export.js"></script>
+  
+  </body>
+</html>

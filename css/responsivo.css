@@ -1,0 +1,90 @@
+/* ==========================
+RESPONSIVIDADE
+========================== */
+
+/* Tablets */
+@media (min-width: 1000px){
+  
+    html {
+        font-size: 80%;
+    }
+    
+    .card {
+        padding: 25px 20px;
+    }
+    
+    #login-section,
+    #selection-section {
+        min-height: calc(100vh - 80px);
+        padding: 15px;
+    }
+    
+    .navbar {
+        padding: 10px 15px;
+    }
+    
+    input,
+    select,
+    textarea,
+    button {
+        padding: 16px 14px;
+    }
+    }
+/* Smartphones menores */
+@-moz-document url-prefix() {
+  @media (max-width: 500px) {
+    html {
+      font-size: 100%;
+    }
+    
+    .card {
+      padding: 20px 15px;
+    }
+    
+    #login-section,
+    #selection-section {
+      min-height: calc(100vh - 60px);
+      padding: 10px;
+    }
+    
+    .navbar {
+      padding: 8px 12px;
+    }
+    
+    input,
+    select,
+    textarea,
+    button {
+      padding: 14px 12px;
+    }
+  }
+  html {
+    font-size: 70%;
+  }
+  
+  .card {
+    padding: 20px 15px;
+  }
+  
+  #login-section,
+  #selection-section {
+    min-height: calc(100vh - 60px);
+    padding: 10px;
+  }
+  
+  .navbar {
+    padding: 8px 12px;
+  }
+  
+  input,
+  select,
+  textarea,
+  button {
+    padding: 14px 12px;
+  }
+}
+
+/* Remove rolagens desnecessárias */
+body {
+  overflow-y: auto;
+}
